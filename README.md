@@ -1,1 +1,1 @@
-This repo contains JS fundamental example codes from the classes on JS 
+Chess Game Project Assignment - Group 7
