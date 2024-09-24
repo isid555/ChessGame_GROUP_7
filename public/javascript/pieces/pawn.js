@@ -15,9 +15,10 @@ Pawn.prototype.isValidPosition = function(targetPosition){
     //Calculate the allowed move distance based on pawn color
     let moveDistance = this.color === 'white' ? 1 : -1;
     let initialRow = this.color === 'white' ? 2 : 7;
+    let targetPiece = this.board.getPieceAt(targetPosition);
 
     //Check if move is valid
-    if(targetPosition.col === currentCol){
+    if(!targetPiece && targetPosition.col === currentCol){
         //Moving Straight
         if(targetPosition.row === (currentRow+moveDistance).toString()){
             //Regular one square move
@@ -29,7 +30,10 @@ Pawn.prototype.isValidPosition = function(targetPosition){
     } else if (Math.abs(targetPosition.col.charCodeAt(0) - currentCol.charCodeAt(0)) === 1 &&
             targetPosition.row === (currentRow + moveDistance).toString()) {
         // Check for regular diagonal capture
-        return true;
+        if (targetPiece && targetPiece.color !== this.color) {
+            targetPiece.kill(targetPiece);
+            return true;
+        }
     }
 
     // If none of the above conditions are met, the move is invalid
@@ -41,5 +45,6 @@ Pawn.prototype.moveTo = function(targetPosition){
     if(this.isValidPosition(targetPosition)){
         this.position = targetPosition.col + targetPosition.row;
         this.render();
+        this.board.switchPlayer();
     }
 }
