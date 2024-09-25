@@ -3,8 +3,6 @@ var Rook = function(config){
     this.constructor(config);
 };
 
-
-
 Rook.prototype = new Piece({});
 
 Rook.prototype.isValidPosition = function(newPosition){

@@ -66,6 +66,7 @@ Board.prototype.boardClicked = function(event){
         //Add 'selected' class to the clicked piece    
         if(this.currentPlayer !== selectedPiece.color){
             console.warn(`It's ${this.currentPlayer}'s turn!`);
+            return;
         }
         if(selectedPiece && this.currentPlayer === selectedPiece.color){
             this.selectPiece(event.target, selectedPiece);

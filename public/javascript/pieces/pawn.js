@@ -3,8 +3,6 @@ var Pawn = function(config){
     this.constructor(config);
 };
 
-
-
 Pawn.prototype = new Piece({});
 
 Pawn.prototype.isValidPosition = function(targetPosition){
