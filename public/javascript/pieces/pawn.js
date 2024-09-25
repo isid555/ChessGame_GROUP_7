@@ -44,5 +44,7 @@ Pawn.prototype.moveTo = function(targetPosition){
         this.position = targetPosition.col + targetPosition.row;
         this.render();
         this.board.switchPlayer();
+    } else {
+        this.board.invalidMove();
     }
 }

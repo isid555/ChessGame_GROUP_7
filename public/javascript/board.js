@@ -61,11 +61,13 @@ Board.prototype.clearSelection = function(){
 Board.prototype.boardClicked = function(event){    
     this.clearSelection();    
     const clickedCell = this.getClickedBlock(event);
-    const selectedPiece = this.getPieceAt(clickedCell)
+    const selectedPiece = this.getPieceAt(clickedCell);
+    // this.selectPiece(event.target, selectedPiece);
     if(selectedPiece){
         //Add 'selected' class to the clicked piece    
-        if(this.currentPlayer !== selectedPiece.color){
+        if(!this.selectedPiece && this.currentPlayer !== selectedPiece.color){
             console.warn(`It's ${this.currentPlayer}'s turn!`);
+            this.invalidMove();
             return;
         }
         if(selectedPiece && this.currentPlayer === selectedPiece.color){
@@ -211,6 +213,11 @@ Board.prototype.renderAllPieces = function() {
     });
 };
 
+Board.prototype.invalidMove = function(){
+    this.selectedPiece = false;
+}
+
 Board.prototype.switchPlayer = function(){
     this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
+    this.selectedPiece = false;
 }

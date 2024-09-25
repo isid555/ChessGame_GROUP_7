@@ -36,5 +36,7 @@ Knight.prototype.moveTo = function(newPosition){
         this.position = newPosition.col + newPosition.row;
         this.render();
         this.board.switchPlayer();
+    } else {
+        this.board.invalidMove();
     }
 }
