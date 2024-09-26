@@ -67,6 +67,7 @@ Board.prototype.boardClicked = function(event){
         //Add 'selected' class to the clicked piece    
         if(!this.selectedPiece && this.currentPlayer !== selectedPiece.color){
             console.warn(`It's ${this.currentPlayer}'s turn!`);
+            this.displayMessage(`It's ${this.currentPlayer}'s turn!`);
             this.invalidMove();
             return;
         }
@@ -191,6 +192,9 @@ Board.prototype.initiateGame = function() {
     for (let i = 0; i < 8; i++) {
         this.blackPieces.pawns.push(new Pawn({ color: 'black', position: String.fromCharCode(65 + i) + '7', board: this }));
     }
+    
+    this.updateGameInfo();
+    this.displayMessage("Game started. White to move.");
 };
 
 Board.prototype.renderAllPieces = function() {
@@ -215,9 +219,28 @@ Board.prototype.renderAllPieces = function() {
 
 Board.prototype.invalidMove = function(){
     this.selectedPiece = false;
-}
+    this.displayMessage(`Invalid move. It's still ${this.currentPlayer}'s turn.`);
+    const invalidMoveElement = document.getElementById('invalid-move');
+    invalidMoveElement.classList.remove('hidden');
+    setTimeout(() => {
+        invalidMoveElement.classList.add('hidden');
+    }, 2000); // Hide the message after 2 seconds
+};
 
 Board.prototype.switchPlayer = function(){
     this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
     this.selectedPiece = false;
-}
+    this.updateGameInfo();
+    this.displayMessage(`It's ${this.currentPlayer}'s turn.`);
+};
+
+Board.prototype.updateGameInfo = function() {
+    const currentTurnElement = document.getElementById('current-turn');
+    currentTurnElement.textContent = `Current Turn: ${this.currentPlayer.charAt(0).toUpperCase() + this.currentPlayer.slice(1)}`;
+    currentTurnElement.setAttribute('data-player', this.currentPlayer.charAt(0).toUpperCase() + this.currentPlayer.slice(1));
+    document.getElementById('invalid-move').classList.add('hidden');
+};
+
+Board.prototype.displayMessage = function(message) {
+    document.getElementById('game-message').textContent = message;
+};
