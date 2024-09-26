@@ -23,14 +23,14 @@ King.prototype.isValidPosition = function(targetPosition){
 
     // King can move one square in any direction
     if (this.color === this.board.currentPlayer && rowDiff <= 1 && colDiff <= 1) {
+        let targetPiece = this.board.getPieceAt(targetPosition);
+    
+        if (targetPiece && targetPiece.color !== this.color) {
+            targetPiece.kill(targetPiece);
+        }
         return true;
     }
-    let targetPiece = this.board.getPieceAt(newPosition);
-
-    if (targetPiece && targetPiece.color !== this.color) {
-        targetPiece.kill(targetPiece);
-    }
-
+    
     console.warn("Invalid move for King");
     return false;
 }
