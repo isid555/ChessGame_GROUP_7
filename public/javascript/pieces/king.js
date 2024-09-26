@@ -25,25 +25,23 @@ King.prototype.isValidPosition = function(targetPosition){
     if (this.color === this.board.currentPlayer && rowDiff <= 1 && colDiff <= 1) {
         return true;
     }
+    let targetPiece = this.board.getPieceAt(newPosition);
+
+    if (targetPiece && targetPiece.color !== this.color) {
+        targetPiece.kill(targetPiece);
+    }
 
     console.warn("Invalid move for King");
     return false;
 }
 
 King.prototype.moveTo = function(targetPosition){
-    // Ensure targetPosition is correctly formatted
-    if (typeof targetPosition === 'string') {
-        targetPosition = {
-            col: targetPosition[0],
-            row: targetPosition[1]
-        };
-    }
 
     if (this.isValidPosition(targetPosition)) {
         console.log("start");
         this.position = targetPosition.col + targetPosition.row;
         this.render();
-        this.board.currentPlayer = this.board.currentPlayer === 'white' ? 'black' : 'white';
+        this.board.switchPlayer();
         return console.log("yes end");
     }
     return console.log("no");
