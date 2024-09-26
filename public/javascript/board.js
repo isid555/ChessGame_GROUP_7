@@ -67,7 +67,6 @@ Board.prototype.boardClicked = function(event){
         //Add 'selected' class to the clicked piece    
         if(!this.selectedPiece && this.currentPlayer !== selectedPiece.color){
             console.warn(`It's ${this.currentPlayer}'s turn!`);
-            this.displayMessage(`It's ${this.currentPlayer}'s turn!`);
             this.invalidMove();
             return;
         }
@@ -194,7 +193,6 @@ Board.prototype.initiateGame = function() {
     }
     
     this.updateGameInfo();
-    this.displayMessage("Game started. White to move.");
 };
 
 Board.prototype.renderAllPieces = function() {
@@ -219,7 +217,6 @@ Board.prototype.renderAllPieces = function() {
 
 Board.prototype.invalidMove = function(){
     this.selectedPiece = false;
-    this.displayMessage(`Invalid move. It's still ${this.currentPlayer}'s turn.`);
     const invalidMoveElement = document.getElementById('invalid-move');
     invalidMoveElement.classList.remove('hidden');
     setTimeout(() => {
@@ -231,7 +228,6 @@ Board.prototype.switchPlayer = function(){
     this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
     this.selectedPiece = false;
     this.updateGameInfo();
-    this.displayMessage(`It's ${this.currentPlayer}'s turn.`);
 };
 
 Board.prototype.updateGameInfo = function() {
@@ -241,6 +237,3 @@ Board.prototype.updateGameInfo = function() {
     document.getElementById('invalid-move').classList.add('hidden');
 };
 
-Board.prototype.displayMessage = function(message) {
-    document.getElementById('game-message').textContent = message;
-};
