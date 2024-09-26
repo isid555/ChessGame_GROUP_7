@@ -62,17 +62,19 @@ Board.prototype.boardClicked = function(event){
     this.clearSelection();    
     const clickedCell = this.getClickedBlock(event);
     const selectedPiece = this.getPieceAt(clickedCell);
-    // this.selectPiece(event.target, selectedPiece);
+
     if(selectedPiece){
-        //Add 'selected' class to the clicked piece    
+        //it is opponent's turn
         if(!this.selectedPiece && this.currentPlayer !== selectedPiece.color){
             console.warn(`It's ${this.currentPlayer}'s turn!`);
             this.invalidMove();
             return;
         }
+        //Add 'selected' class to the clicked piece    
         if(selectedPiece && this.currentPlayer === selectedPiece.color){
             this.selectPiece(event.target, selectedPiece);
         } else {
+            //current player turn so we move
             this.selectedPiece.moveTo(clickedCell);
             this.clearSelection();
         }
@@ -191,6 +193,8 @@ Board.prototype.initiateGame = function() {
     for (let i = 0; i < 8; i++) {
         this.blackPieces.pawns.push(new Pawn({ color: 'black', position: String.fromCharCode(65 + i) + '7', board: this }));
     }
+    
+    this.updateGameInfo();
 };
 
 Board.prototype.renderAllPieces = function() {
@@ -215,9 +219,23 @@ Board.prototype.renderAllPieces = function() {
 
 Board.prototype.invalidMove = function(){
     this.selectedPiece = false;
-}
+    const $invalidMoveElement = document.getElementById('invalid-move');
+    $invalidMoveElement.classList.remove('hidden');
+    setTimeout(() => {
+        $invalidMoveElement.classList.add('hidden');
+    }, 2000); // Hide the message after 2 seconds
+};
 
 Board.prototype.switchPlayer = function(){
     this.currentPlayer = this.currentPlayer === 'white' ? 'black' : 'white';
     this.selectedPiece = false;
-}
+    this.updateGameInfo();
+};
+
+Board.prototype.updateGameInfo = function() {
+    const $currentTurnElement = document.getElementById('current-turn');
+    $currentTurnElement.textContent = `Current Turn: ${this.currentPlayer}`;
+    $currentTurnElement.setAttribute('data-player', this.currentPlayer);
+    document.getElementById('invalid-move').classList.add('hidden');
+};
+
