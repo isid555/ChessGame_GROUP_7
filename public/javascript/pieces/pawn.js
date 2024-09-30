@@ -3,15 +3,13 @@ var Pawn = function(config){
     this.constructor(config);
 };
 
-
-
 Pawn.prototype = new Piece({});
 
 Pawn.prototype.isValidPosition = function(targetPosition){
     //Convert current position to row and column
     let currentCol = this.position.charAt(0);
     let currentRow = parseInt(this.position.charAt(1));
-    
+
     //Calculate the allowed move distance based on pawn color
     let moveDistance = this.color === 'white' ? 1 : -1;
     let initialRow = this.color === 'white' ? 2 : 7;
@@ -28,7 +26,7 @@ Pawn.prototype.isValidPosition = function(targetPosition){
             return true;
         }
     } else if (Math.abs(targetPosition.col.charCodeAt(0) - currentCol.charCodeAt(0)) === 1 &&
-            targetPosition.row === (currentRow + moveDistance).toString()) {
+        targetPosition.row === (currentRow + moveDistance).toString()) {
         // Check for regular diagonal capture
         if (targetPiece && targetPiece.color !== this.color) {
             targetPiece.kill(targetPiece);
@@ -46,5 +44,7 @@ Pawn.prototype.moveTo = function(targetPosition){
         this.position = targetPosition.col + targetPosition.row;
         this.render();
         this.board.switchPlayer();
+    } else {
+        this.board.invalidMove();
     }
 }

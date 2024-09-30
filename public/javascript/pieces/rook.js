@@ -3,14 +3,12 @@ var Rook = function(config){
     this.constructor(config);
 };
 
-
-
 Rook.prototype = new Piece({});
 
 Rook.prototype.isValidPosition = function(newPosition){
     let currentCol = this.position.charAt(0);
     let currentRow = parseInt(this.position.charAt(1));
-    
+
     let newCol = newPosition.col;
     let newRow = parseInt(newPosition.row);
     let targetPiece = this.board.getPieceAt(newPosition);
@@ -63,5 +61,7 @@ Rook.prototype.moveTo = function(newPosition){
         this.position = newPosition.col + newPosition.row;
         this.render();
         this.board.switchPlayer();
+    } else {
+        this.board.invalidMove();
     }
 }
