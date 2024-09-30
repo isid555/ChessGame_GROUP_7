@@ -43,20 +43,21 @@ Piece.prototype.render = function(){
     }
 }
 
-Piece.prototype.kill = function(targetPiece){
-    const pieces = targetPiece.color === 'white' ? this.board.whitePieces : this.board.blackPieces;
-    const pieceType = (targetPiece.type === 'king' || targetPiece.type === 'queen') ? targetPiece.type : targetPiece.type + 's';
-    if(targetPiece.type === 'king' || targetPiece.type === 'queen'){
-        delete pieces[targetPiece.type];
-    } else{
-        const index = pieces[pieceType].indexOf(targetPiece);
-        if (index !== -1) {
-            pieces[pieceType].splice(index, 1);
-        }
-    }
-
-    this.removePiece(targetPiece);
-}
+// Piece.prototype.kill = function(targetPiece){
+//     const pieces = targetPiece.color === 'white' ? this.board.whitePieces : this.board.blackPieces;
+//     const pieceType = (targetPiece.type === 'king' || targetPiece.type === 'queen') ? targetPiece.type : targetPiece.type + 's';
+//
+//     if(targetPiece.type === 'king' || targetPiece.type === 'queen'){
+//         // delete pieces[targetPiece.type];
+//     } else{
+//         const index = pieces[pieceType].indexOf(targetPiece);
+//         if (index !== -1) {
+//             pieces[pieceType].splice(index, 1);
+//         }
+//     }
+//
+//     this.removePiece(targetPiece);
+// }
 
 Piece.prototype.removePiece = function(config) {
     let $element = document.querySelector(`[data-col="${config.position[0]}"] [data-row="${config.position[1]}"]`);
@@ -64,3 +65,47 @@ Piece.prototype.removePiece = function(config) {
         $element.innerHTML = '';
     }
 };
+Piece.prototype.kill = function(targetPiece) {
+    // Get the collection of pieces (white or black) based on the target piece's color
+    const pieces = targetPiece.color === 'white' ? this.board.whitePieces : this.board.blackPieces;
+
+    // Check if the target is the king, in which case we need to stop the game
+    if (targetPiece.type === 'king') {
+        console.log(`${targetPiece.color} King has been killed. Game over!`);
+
+        // Trigger the end game logic to clear the board
+        this.endGame();
+
+        return; // Exit the function, no need to continue removing other pieces
+    }
+
+    // Determine the type of piece (handle singular or plural forms like 'pawn' and 'pawns')
+    const pieceType = (targetPiece.type === 'queen') ? targetPiece.type : targetPiece.type + 's';
+
+    // If it's not a queen, find and remove the piece from the respective piece list
+    if (targetPiece.type !== 'queen') {
+        const index = pieces[pieceType].indexOf(targetPiece);
+        if (index !== -1) {
+            pieces[pieceType].splice(index, 1);
+        }
+    }
+    else{
+        delete pieces[targetPiece.type];
+    }
+
+    // Remove the piece from the board
+    this.removePiece(targetPiece);
+}
+
+// Method to handle clearing all pieces from the board
+Piece.prototype.endGame = function() {
+    // Select all piece elements on the board and remove them
+    const allPieces = document.querySelectorAll('.piece');
+    allPieces.forEach(piece => piece.remove());
+
+    // Optionally, display a game over message
+    alert('Game over! All pieces have been cleared.');
+    console.log(`Game over! ${this.board.currentPlayer} has won!`);
+
+
+}
